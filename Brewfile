@@ -40,7 +40,6 @@ brew "fcitx-remote-for-osx"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream audio and video
-brew "ffmpeg@7"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GitHub command-line tool
@@ -74,7 +73,6 @@ brew "libquicktime"
 # Mac App Store command-line interface
 brew "mas"
 # Play, record, convert, and stream select audio and video codecs
-brew "ffmpeg", args: ["with-fdk-aac", "with-libplacebo", "with-libsoxr", "with-openh264", "with-openjpeg", "with-openssl", "with-rubberband", "with-srt", "with-webp", "with-zimg"]
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.14"
 # Feature-rich command-line audio/video downloader
@@ -243,10 +241,8 @@ cask "visualdiffer"
 # Rust-based terminal
 cask "warp"
 mas "Adblock Plus", id: 1432731683
-mas "Metadatics", id: 554883654
 mas "Pages", id: 409201541
 mas "Pages", id: 361309726
 mas "SiteSucker", id: 442168834
 mas "Telegram", id: 747648890
-mas "WhatsApp", id: 310633997
 npm "@pnp/cli-microsoft365"
