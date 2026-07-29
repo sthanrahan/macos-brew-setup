@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 tap "homebrew-ffmpeg/ffmpeg"
 tap "powershell/tap"
 tap "teamookla/speedtest"
@@ -5,10 +6,14 @@ tap "teamookla/speedtest"
 brew "arp-scan"
 # Automatic configure script builder
 brew "autoconf"
+=======
+tap "powershell/tap"
+>>>>>>> eaed35f (Add Brewfile for system setup)
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+<<<<<<< HEAD
 # Cross-platform make
 brew "cmake"
 # Use Codex from ACP-compatible clients such as Zed!
@@ -21,18 +26,30 @@ brew "curl"
 brew "fcitx-remote-for-osx"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+=======
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Play, record, convert, and stream audio and video
+brew "ffmpeg"
+>>>>>>> eaed35f (Add Brewfile for system setup)
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
 brew "git"
+<<<<<<< HEAD
 # GNU implementation of time utility
 brew "gnu-time"
+=======
+>>>>>>> eaed35f (Add Brewfile for system setup)
 # Improved top (interactive process viewer)
 brew "htop"
 # Website copier/offline browser
 brew "httrack"
+<<<<<<< HEAD
 # Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
 # Lightweight and flexible command-line JSON processor
@@ -65,16 +82,35 @@ brew "tmux"
 brew "tor"
 # Use SOCKS-friendly applications with Tor
 brew "torsocks"
+=======
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# 'traceroute' and 'ping' in a single tool
+brew "mtr"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.14"
+# Execute binaries from Python packages in isolated environments
+brew "pipx"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Terminal multiplexer
+brew "tmux"
+>>>>>>> eaed35f (Add Brewfile for system setup)
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Internet file retriever
 brew "wget"
+<<<<<<< HEAD
 # Show the current WiFi network password
 brew "wifi-password"
 # Tools for the WireGuard secure network tunnel
 brew "wireguard-tools"
 # Command-line interface for WordPress
 brew "wp-cli"
+=======
+>>>>>>> eaed35f (Add Brewfile for system setup)
 # XML command-line utilities
 brew "xmlstarlet"
 # Feature-rich command-line audio/video downloader
@@ -85,6 +121,7 @@ brew "zsh"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+<<<<<<< HEAD
 # Play, record, convert, and stream audio and video
 brew "homebrew-ffmpeg/ffmpeg/ffmpeg", args: ["with-fdk-aac", "with-libplacebo", "with-libsoxr", "with-openh264", "with-openjpeg", "with-openssl", "with-rubberband", "with-srt", "with-webp", "with-zimg"]
 # Formula to install PowerShell
@@ -97,6 +134,10 @@ cask "codex"
 cask "codex-app"
 # Menu bar usage monitor for Codex and Claude
 cask "codexbar"
+=======
+# Formula to install PowerShell Long Term Stable Channel
+brew "powershell/tap/powershell-lts"
+>>>>>>> eaed35f (Add Brewfile for system setup)
 cask "font-adwaita-mono-nerd-font"
 cask "font-andale-mono"
 cask "font-anka-coder"
@@ -157,12 +198,16 @@ cask "font-fira-code-nerd-font"
 cask "font-google-sans-code"
 # Speech recognition tool
 cask "macwhisper"
+<<<<<<< HEAD
 # Verify system files structure, run miscellaneous maintenance and more
 cask "onyx"
+=======
+>>>>>>> eaed35f (Add Brewfile for system setup)
 # SEO site audit tool
 cask "screaming-frog-seo-spider"
 # Rust-based terminal
 cask "warp"
+<<<<<<< HEAD
 # Database management tool with AI-powered features
 cask "whodb"
 mas "Metadatics", id: 554883654
@@ -172,3 +217,5 @@ mas "Pages", id: 409201541
 mas "SiteSucker", id: 442168834
 mas "Telegram", id: 747648890
 mas "WhatsApp", id: 310633997
+=======
+>>>>>>> eaed35f (Add Brewfile for system setup)
