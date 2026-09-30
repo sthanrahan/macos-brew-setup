@@ -61,8 +61,9 @@ The 12 named shared fonts refreshed successfully on both Macs on
 1 October 2026. Persistent greedy latest-to-latest reports remain a
 verification limitation; do not repeat successful refreshes solely for this.
 
-Shannon's ~/Projects/macos-brew-setup clone remains non-canonical.
-Retain it until a separate review authorises archival or removal.
+Shannon's stale duplicate clone is archived intact under ~/Projects/Archive/.
+See docs/Current-State-20261001.md for its location.
+~/.dotfiles is the sole canonical working clone.
 Private SSH keys never belong in this repository.
 
 ## Shannon FFmpeg workflow
