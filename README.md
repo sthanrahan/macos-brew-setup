@@ -72,3 +72,8 @@ Standard Homebrew ffmpeg remains the default.
 Shannon retains ffmpeg@7 for subtitle burn-in and text rendering.
 Invoke /opt/homebrew/opt/ffmpeg@7/bin/ffmpeg directly when needed;
 no global unlinking or relinking is required.
+
+## Telegram policy
+
+Retain telegram-downloader and telegram-send on both Macs.
+Telegram GUI applications are excluded from active profiles.

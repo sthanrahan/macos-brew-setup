@@ -29,6 +29,5 @@ mas "Airmail", id: 918858936
 mas "Microsoft To Do", id: 1274495053
 mas "Pages (additional recorded ID)", id: 361309726
 mas "SiteSucker", id: 442168834
-mas "Telegram", id: 747648890
 mas "Wire", id: 931134707
 brew "teamookla/speedtest/speedtest", trusted: true

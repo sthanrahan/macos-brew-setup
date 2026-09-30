@@ -35,3 +35,9 @@ The original pre-refresh handover is historical.
 Telegram Desktop beta was uninstalled from Shannon MBP 13 - M1 (2020).
 Its declaration moved from shared baseline to the phl profile.
 The other Mac retains its installation.
+
+## Telegram CLI-only decision
+
+GUI declarations removed from both active machine profiles.
+Shannon app removal verified; both CLI tools retained.
+PHL local app removal remains to be verified.
