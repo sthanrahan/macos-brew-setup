@@ -429,11 +429,11 @@ shellsync() {
 
       echo
       echo "=== DIFF SUMMARY ==="
-      git -C "$repo" diff --stat
+      git -C "$repo" --no-pager diff --stat
 
       echo
       echo "=== DIFF ==="
-      git -C "$repo" diff
+      git -C "$repo" --no-pager diff
 
       echo
       printf "Commit and push these changes? [y/N] "
