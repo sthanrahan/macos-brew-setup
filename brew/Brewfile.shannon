@@ -1,0 +1,34 @@
+# Personal Mac additions; Node is supplied through NVM.
+tap "teamookla/speedtest", trusted: true
+brew "codex-acp"
+brew "coreutils"
+brew "cups"
+brew "emacs"
+brew "ffmpeg@7"
+brew "flock"
+brew "gawk"
+brew "gnupg"
+brew "jq"
+brew "libconfig"
+brew "mpv"
+brew "ncmpcpp"
+brew "netaddr"
+brew "nox"
+brew "nvm"
+brew "qrencode"
+cask "blackhole-2ch"
+cask "canva"
+cask "electrum-ltc"
+cask "fuse-t"
+cask "github-copilot-app"
+cask "inkscape"
+cask "session"
+cask "zotero"
+mas "Adblock Plus", id: 1432731683
+mas "Airmail", id: 918858936
+mas "Microsoft To Do", id: 1274495053
+mas "Pages (additional recorded ID)", id: 361309726
+mas "SiteSucker", id: 442168834
+mas "Telegram", id: 747648890
+mas "Wire", id: 931134707
+brew "teamookla/speedtest/speedtest", trusted: true
