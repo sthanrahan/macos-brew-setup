@@ -29,3 +29,9 @@ Future review:
 
 No further work is required for the verified current alignment.
 The original pre-refresh handover is historical.
+
+## Post-alignment change
+
+Telegram Desktop beta was uninstalled from Shannon MBP 13 - M1 (2020).
+Its declaration moved from shared baseline to the phl profile.
+The other Mac retains its installation.
