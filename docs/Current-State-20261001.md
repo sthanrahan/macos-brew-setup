@@ -40,4 +40,4 @@ The other Mac retains its installation.
 
 GUI declarations removed from both active machine profiles.
 Shannon app removal verified; both CLI tools retained.
-PHL local app removal remains to be verified.
+PHL checked app locations, Homebrew records and App Store record are clear; both CLI tools retained. GUI removal is verified on both Macs.
