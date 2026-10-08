@@ -1,7 +1,7 @@
 # Shared baseline; dependency trees are not mirrored.
 brew "ffmpeg"
 brew "arp-scan"
-brew "azure-cli"
+cask "azure-cli"
 brew "bat"
 brew "chrome-cli"
 brew "chrome-export"
