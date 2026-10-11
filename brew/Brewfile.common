@@ -155,3 +155,19 @@ mas "Metadatics", id: 554883654
 mas "Pages", id: 409201541
 mas "WhatsApp", id: 310633997
 cask "telegram"
+
+# Applications shared across both managed Macs.
+cask "electrum-ltc"
+cask "github-copilot-app"
+cask "inkscape"
+cask "session"
+cask "zotero"
+mas "Adblock Plus", id: 1432731683
+mas "Airmail", id: 918858936
+mas "Microsoft To Do", id: 1274495053
+mas "SiteSucker", id: 442168834
+mas "Wire", id: 931134707
+cask "commander"
+cask "dcommander"
+mas "Exporter", id: 1099120373
+mas "Numbers", id: 409203825

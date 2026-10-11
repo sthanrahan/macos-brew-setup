@@ -27,9 +27,5 @@ brew "translate-shell"
 brew "xcodes"
 brew "xidel"
 brew "yt-dlp"
-cask "commander"
-cask "dcommander"
 cask "font-envy-code-r"
 cask "font-jetbrains-mono-nerd-font"
-mas "Exporter", id: 1099120373
-mas "Numbers", id: 409203825
