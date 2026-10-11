@@ -31,7 +31,6 @@ cask "commander"
 cask "dcommander"
 cask "font-envy-code-r"
 cask "font-jetbrains-mono-nerd-font"
-cask "spotify"
 mas "Canva", id: 897446215
 mas "Exporter", id: 1099120373
 mas "Numbers", id: 409203825
