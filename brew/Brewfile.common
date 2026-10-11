@@ -154,3 +154,4 @@ cask "warp"
 mas "Metadatics", id: 554883654
 mas "Pages", id: 409201541
 mas "WhatsApp", id: 310633997
+cask "telegram"
