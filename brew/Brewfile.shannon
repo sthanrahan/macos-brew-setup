@@ -18,5 +18,4 @@ brew "nvm"
 brew "qrencode"
 cask "blackhole-2ch"
 cask "fuse-t"
-mas "Pages (additional recorded ID)", id: 361309726
 brew "teamookla/speedtest/speedtest", trusted: true

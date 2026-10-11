@@ -152,7 +152,7 @@ cask "visual-studio-code"
 cask "visualdiffer"
 cask "warp"
 mas "Metadatics", id: 554883654
-mas "Pages", id: 409201541
+mas "Pages", id: 361309726
 mas "WhatsApp", id: 310633997
 cask "telegram"
 
