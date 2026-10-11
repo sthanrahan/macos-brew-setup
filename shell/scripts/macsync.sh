@@ -153,6 +153,43 @@ printf '\n=== EXTRA CASKS — PRESERVED FOR REVIEW ===\n'
 comm -23 "$WORK/installed" "$WORK/required" |
   comm -23 - "$WORK/retired"
 
+
+printf '\n=== RETIRED APP STORE APPS STILL INSTALLED ===\n'
+: > "$WORK/retired-mas"
+if [[ -f "$REPO/brew/retired-mas.txt" ]]; then
+  while IFS= read -r ENTRY || [[ -n "$ENTRY" ]]; do
+    case "$ENTRY" in ''|\#*) continue ;; esac
+    [[ "$ENTRY" =~ ^[0-9]+$ ]] || {
+      printf 'STOP: Invalid retired App Store ID: %s\n' "$ENTRY"
+      exit 1
+    }
+    if grep -Eq "^[[:space:]]*mas .*id:[[:space:]]*$ENTRY([,[:space:]]|$)" \
+      "$REPO/brew/Brewfile.common" \
+      "$REPO/brew/Brewfile.shannon" \
+      "$REPO/brew/Brewfile.phl"; then
+      printf 'STOP: App Store ID %s is both required and retired.\n' "$ENTRY"
+      exit 1
+    fi
+    printf '%s\n' "$ENTRY" >> "$WORK/retired-mas"
+  done < "$REPO/brew/retired-mas.txt"
+fi
+
+mas list > "$WORK/mas-installed"
+awk '{print $1}' "$WORK/mas-installed" |
+  sort -u > "$WORK/mas-installed-ids"
+sort -u "$WORK/retired-mas" > "$WORK/mas-retired-ids"
+comm -12 "$WORK/mas-retired-ids" "$WORK/mas-installed-ids" \
+  > "$WORK/mas-removals"
+
+if [[ -s "$WORK/mas-removals" ]]; then
+  while IFS= read -r ENTRY; do
+    awk -v id="$ENTRY" '$1 == id' "$WORK/mas-installed"
+  done < "$WORK/mas-removals"
+  DRIFT=1
+else
+  printf 'None.\n'
+fi
+
 if [[ "$ACTION" == status ]]; then
   printf '\nCoverage: declared Brewfile packages and listed shared files.\n'
   printf 'Unmanaged apps, extra formulae and NVM are not reconciled.\n'
@@ -162,7 +199,7 @@ if [[ "$ACTION" == status ]]; then
 fi
 
 printf '\nApply shared files, install missing requirements without upgrades,\n'
-printf 'and uninstall only the retired casks listed above? [y/N] '
+printf 'and uninstall only the retired casks and App Store apps listed above? [y/N] '
 read -r ANSWER
 case "$ANSWER" in y|Y|yes|YES) ;; *) exit 1 ;; esac
 
@@ -199,6 +236,15 @@ brew bundle install --no-upgrade --file="$REPO/Brewfile"
 while IFS= read -r ENTRY; do
   brew uninstall --cask "$ENTRY"
 done < "$WORK/removals"
+
+while IFS= read -r ENTRY; do
+  # A cask removal may already have removed the same app bundle.
+  mas list > "$WORK/mas-current"
+  if awk -v id="$ENTRY" '$1 == id {found=1} END {exit !found}' \
+    "$WORK/mas-current"; then
+    mas uninstall "$ENTRY"
+  fi
+done < "$WORK/mas-removals"
 
 brew bundle check --no-upgrade --verbose --file="$REPO/Brewfile"
 printf '\nBackup: %s\n' "$BACKUP"

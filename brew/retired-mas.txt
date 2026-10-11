@@ -1,0 +1,3 @@
+# App Store IDs explicitly retired from both managed Macs.
+# Canva
+897446215

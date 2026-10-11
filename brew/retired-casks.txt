@@ -2,3 +2,4 @@
 # Other installed applications are preserved.
 nextcloud
 spotify
+canva
