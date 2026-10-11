@@ -231,7 +231,7 @@ for item in cleanmac macsync; do
   chmod 755 "$HOME/.local/bin/$item"
 done
 
-brew bundle install --no-upgrade --verbose --file="$REPO/Brewfile"
+/bin/bash "$REPO/shell/scripts/run-with-activity.sh" "Package installation" brew bundle install --no-upgrade --verbose --file="$REPO/Brewfile"
 
 while IFS= read -r ENTRY; do
   brew uninstall --cask "$ENTRY"
