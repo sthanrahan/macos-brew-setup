@@ -45,12 +45,12 @@ if [[ "$ACTION" == apply ]]; then
   }
 
   # Preserve live edits: accept only the local or incoming canonical copy.
-  for item in .zshenv .zprofile .zshrc fixram.sh memory_diagnostic.sh cleanmac.sh; do
+  for item in .zshenv .zprofile .zshrc fixram.sh memory_diagnostic.sh cleanmac.sh macsync.sh macmaintain.sh; do
     case "$item" in
       .*) SOURCE="shell/$item"; LIVE="$HOME/$item" ;;
-      cleanmac.sh)
+      cleanmac.sh|macsync.sh|macmaintain.sh)
         SOURCE="shell/scripts/$item"
-        LIVE="$HOME/.local/bin/cleanmac"
+        LIVE="$HOME/.local/bin/${item%.sh}"
         ;;
       *) SOURCE="shell/scripts/$item"; LIVE="$HOME/$item" ;;
     esac
@@ -118,10 +118,10 @@ sort -u "$WORK/required-$PROFILE" > "$WORK/required"
 
 printf '\n=== SHARED FILES ===\n'
 DRIFT=0
-for item in .zshenv .zprofile .zshrc fixram.sh memory_diagnostic.sh cleanmac.sh macsync.sh; do
+for item in .zshenv .zprofile .zshrc fixram.sh memory_diagnostic.sh cleanmac.sh macsync.sh macmaintain.sh; do
   case "$item" in
     .*) SOURCE="shell/$item"; LIVE="$HOME/$item" ;;
-    cleanmac.sh|macsync.sh)
+    cleanmac.sh|macsync.sh|macmaintain.sh)
       SOURCE="shell/scripts/$item"
       LIVE="$HOME/.local/bin/${item%.sh}"
       ;;
@@ -211,6 +211,7 @@ for item in fixram.sh memory_diagnostic.sh; do
 done
 /bin/bash -n "$REPO/shell/scripts/cleanmac.sh"
 /bin/bash -n "$REPO/shell/scripts/macsync.sh"
+/bin/bash -n "$REPO/shell/scripts/macmaintain.sh"
 
 BACKUP="$HOME/.zsh-backups/macsync-$(date +%Y%m%d-%H%M%S)-$$"
 mkdir -p "$BACKUP" "$HOME/.local/bin"
@@ -218,7 +219,7 @@ for item in fixram.sh memory_diagnostic.sh; do
   [[ ! -e "$HOME/$item" ]] ||
     cp -p "$HOME/$item" "$BACKUP/$item"
 done
-for item in cleanmac macsync; do
+for item in cleanmac macsync macmaintain; do
   [[ ! -e "$HOME/.local/bin/$item" ]] ||
     cp -p "$HOME/.local/bin/$item" "$BACKUP/$item"
 done
@@ -226,7 +227,7 @@ done
 # Delegate shell deployment to the existing guarded workflow.
 /bin/zsh -lic 'shellsync pull'
 
-for item in cleanmac macsync; do
+for item in cleanmac macsync macmaintain; do
   cp -p "$REPO/shell/scripts/$item.sh" "$HOME/.local/bin/$item"
   chmod 755 "$HOME/.local/bin/$item"
 done

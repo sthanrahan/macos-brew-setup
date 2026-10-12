@@ -77,3 +77,18 @@ no global unlinking or relinking is required.
 
 Retain telegram-downloader and telegram-send on both Macs.
 Telegram GUI applications are excluded from active profiles.
+
+## Portable maintenance command
+
+Run macmaintain on either managed Mac. It verifies alignment, updates and
+upgrades Homebrew packages, runs brew doctor, invokes the current user's
+fixram.sh and runs cleanmac. It stops on failure and copies output,
+errors and exit codes to the macOS clipboard. Logs remain in a temporary file.
+
+The command is stored in shell/scripts/macmaintain.sh and deployed to
+~/.local/bin/macmaintain. macsync checks and deploys it alongside its other
+managed commands. Incoming repository changes require macsync apply first,
+preserving the existing review and backup safeguards.
+
+Maintenance does not create commits for package-version changes. Changes
+to the managed scripts themselves are committed and pushed deliberately.
