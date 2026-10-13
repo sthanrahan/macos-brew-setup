@@ -92,3 +92,9 @@ preserving the existing review and backup safeguards.
 
 Maintenance does not create commits for package-version changes. Changes
 to the managed scripts themselves are committed and pushed deliberately.
+
+## GitHub Copilot retirement
+
+github-copilot-app is deliberately retired on both managed Macs.
+It is excluded from active Brewfiles and listed in retired-casks.txt.
+Microsoft 365 Copilot is a separate application and remains unchanged.

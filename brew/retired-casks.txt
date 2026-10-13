@@ -3,3 +3,4 @@
 nextcloud
 spotify
 canva
+github-copilot-app

@@ -158,7 +158,6 @@ cask "telegram"
 
 # Applications shared across both managed Macs.
 cask "electrum-ltc"
-cask "github-copilot-app"
 cask "inkscape"
 cask "session"
 cask "zotero"
