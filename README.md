@@ -98,3 +98,9 @@ to the managed scripts themselves are committed and pushed deliberately.
 github-copilot-app is deliberately retired on both managed Macs.
 It is excluded from active Brewfiles and listed in retired-casks.txt.
 Microsoft 365 Copilot is a separate application and remains unchanged.
+
+## Shared Spotify application
+
+Spotify is deliberately retained on both managed Macs.
+Brewfile.common declares cask "spotify"; it is not retired.
+spotify_player is a separate CLI tool.

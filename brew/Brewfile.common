@@ -170,3 +170,5 @@ cask "commander"
 cask "dcommander"
 mas "Exporter", id: 1099120373
 mas "Numbers", id: 361304891
+
+cask "spotify"

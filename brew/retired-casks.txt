@@ -1,6 +1,5 @@
 # Homebrew casks explicitly retired from both managed Macs.
 # Other installed applications are preserved.
 nextcloud
-spotify
 canva
 github-copilot-app
