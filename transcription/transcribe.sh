@@ -468,52 +468,58 @@ ARGS=(
   "${ALIGN_ARGS[@]}"
 )
 
-if (( DIARIZE )); then
-  ARGS+=(
-    --diarize
-    "${SPEAKER_ARGS[@]}"
-  )
-fi
-
 print ""
-print "=== Starting WhisperX ==="
+print "=== Starting WhisperX transcription and alignment ==="
 
 # Hugging Face token is obtained inside Python.
 # It is not exposed in the shell command line.
 python3 - "${ARGS[@]}" <<'PY_WHISPER' 2>&1 | tee "$LOG"
-import os
-import sys
-
-from huggingface_hub import (
-    HfApi,
-    get_token,
-)
-
-if os.environ["TX_DIARIZE"] == "1":
-    token = get_token()
-
-    if not token:
-        sys.exit(
-            "No cached Hugging Face login. "
-            "Run: hf auth login --force"
-        )
-
-    try:
-        HfApi().whoami(token=token)
-    except Exception:
-        sys.exit(
-            "Cached Hugging Face login was rejected. "
-            "Run: hf auth login --force"
-        )
-
-    sys.argv.extend(
-        ["--hf_token", token]
-    )
-
+# Hugging Face authentication is handled by diarize-separately.py.
 from whisperx.__main__ import cli
 
 cli()
 PY_WHISPER
+
+if (( DIARIZE )); then
+  print ""
+  print "=== Starting Independent MPS Diarisation ==="
+
+  JSON_FILES=("$RUN"/raw/*.json(N))
+
+  if (( ${#JSON_FILES} != 1 )); then
+    print -u2 "Expected exactly one transcription JSON."
+    exit 1
+  fi
+
+  DIARIZED_JSON="$RUN/diarized.json"
+
+  if [[ -e "$DIARIZED_JSON" ]]; then
+    print -u2 "Diarisation output already exists; refusing to overwrite."
+    exit 1
+  fi
+
+  DIARIZATION_ARGS=(
+    --audio "$OUTPUT"
+    --transcript "$JSON_FILES[1]"
+    --output "$DIARIZED_JSON"
+    --device mps
+  )
+
+  for (( i = 1; i <= ${#SPEAKER_ARGS}; i++ )); do
+    case "${SPEAKER_ARGS[i]}" in
+      --min_speakers)
+        DIARIZATION_ARGS+=(--min-speakers "${SPEAKER_ARGS[i+1]}")
+        ;;
+      --max_speakers)
+        DIARIZATION_ARGS+=(--max-speakers "${SPEAKER_ARGS[i+1]}")
+        ;;
+    esac
+  done
+
+  "$VENV/bin/python3"     "$ROOT/diarize-separately.py"     "${DIARIZATION_ARGS[@]}" 2>&1 | tee -a "$LOG"
+
+  print "Original WhisperX JSON preserved; diarised JSON saved separately."
+fi
 
 print ""
 print "=== Validating and Reviewing Transcript ==="
@@ -527,9 +533,14 @@ from pathlib import Path
 
 run = Path(os.environ["TX_RUN"])
 
-results = list(
-    (run / "raw").glob("*.json")
-)
+diarized_path = run / "diarized.json"
+
+if os.environ["TX_DIARIZE"] == "1":
+    results = [diarized_path] if diarized_path.is_file() else []
+else:
+    results = list(
+        (run / "raw").glob("*.json")
+    )
 
 if len(results) != 1:
     raise SystemExit(
@@ -823,6 +834,26 @@ else
   print "WARNING:"
   print "Completed archive is valid, but the original"
   print "audio could not be removed from its source location."
+fi
+
+# Optional speaker naming runs only after successful archiving.
+# Failure or cancellation must not invalidate the transcription.
+SPEAKER_HELPER="$ROOT/identify-speakers.py"
+
+if [[ -f "$SPEAKER_HELPER" ]]; then
+  print ""
+  read "name_speakers?Identify speakers now? [y/N]: "
+
+  if [[ "${name_speakers:l}" == "y" ]]; then
+    if python3 "$SPEAKER_HELPER" "$RUN"; then
+      print "Speaker identification finished."
+    else
+      print "WARNING: Speaker identification did not complete."
+      print "The completed transcription remains archived."
+    fi
+  else
+    print "Speaker identification skipped."
+  fi
 fi
 
 print ""

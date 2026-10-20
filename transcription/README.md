@@ -7,7 +7,9 @@ This directory preserves the shared transcription workflow used on:
 
 ## Canonical files
 
-- transcribe.sh — interactive WhisperX transcription workflow.
+- transcribe.sh — interactive transcription, alignment, independent diarisation and transcript review.
+- diarize-separately.py — independent speaker diarisation.
+- identify-speakers.py — optional speaker naming.
 - whisperx-progress.sh — read-only progress monitor.
 - requirements.txt — curated shared Python dependency baseline.
 - maori_glossary.txt — shared vocabulary hints.
@@ -29,9 +31,27 @@ This minor indirect-package difference does not alter the shared scripts.
 
 ## Operational location
 
-The live folder is ~/Desktop/transcript-cleanup on each Mac.
+The canonical scripts are maintained in ~/.dotfiles/transcription/.
+The live workspace is ~/Desktop/transcript-cleanup on each Mac.
 The normal virtual environment is ~/Desktop/transcript-cleanup/whisperx-env.
 WHISPERX_VENV may select another environment.
+
+Deploy the following files together from the canonical directory to the live workspace:
+
+- transcribe.sh
+- diarize-separately.py
+- identify-speakers.py
+
+Review local differences before replacing existing live scripts. Do not deploy during an active transcription run.
+
+## Processing architecture
+
+WhisperX performs transcription and alignment first.
+When diarisation is requested, a separate Python process runs speaker diarisation using PyTorch MPS.
+The original WhisperX JSON is preserved. Speaker assignments are saved separately in diarized.json and incorporated into the human-readable review transcript.
+Optional speaker naming occurs after successful archiving.
+
+MPS diarisation has been validated on PHL. Shannon requires verification after deployment.
 
 ## Authentication
 
@@ -45,13 +65,24 @@ The normal Homebrew ffmpeg formula remains globally active.
 Shannon also retains keg-only ffmpeg@7 for the current TorchCodec installation.
 Do not globally link ffmpeg@7.
 
-The duplicate AVFoundation-class warning on Shannon is non-fatal in the
-validated configuration. A complete workflow succeeded on 8 October 2026.
+The earlier Shannon configuration produced duplicate AVFoundation-class
+warnings involving PyAV and FFmpeg libraries. A complete workflow
+succeeded on 8 October 2026, but the underlying library collision
+was not resolved.
+
+The newer PHL workflow separates transcription and diarisation into
+different Python processes. Completed PHL runs produced speaker-labelled
+transcripts without duplicate Objective-C class warnings in their logs.
+TorchCodec library-loading warnings remain present in those logs.
+Do not globally modify DYLD_LIBRARY_PATH or relink ffmpeg@7 merely
+to suppress these warnings.
 
 ## Expected script hashes
 
-- transcribe.sh: 09a63efbbd9e62c82f0f9ef89d084d7b4c3a79cb63cd5624ff9ad40abc36737c
+- transcribe.sh: 8f709fccf2ae1084cc902dd2b82b83214180a060647ac454816b5f8811b23820
 - whisperx-progress.sh: 5bb1490b260129e3d81be54e3036c3396c87ea6be1bbbe47420bbbd365ed3bc4
+- diarize-separately.py: d1a6c15c56f93056797aaa454e50aabbd20912e5e6b6344af4d11110b65f1bf8
+- identify-speakers.py: 5c2ecdd5882da291829322eadf209dc16919038057447db5d10447c39cc5b648
 
 ## Restoration status
 
