@@ -51,7 +51,37 @@ When diarisation is requested, a separate Python process runs speaker diarisatio
 The original WhisperX JSON is preserved. Speaker assignments are saved separately in diarized.json and incorporated into the human-readable review transcript.
 Optional speaker naming occurs after successful archiving.
 
-MPS diarisation has been validated on PHL. Shannon requires verification after deployment.
+MPS diarisation has been validated on both PHL and Shannon.
+
+### Shannon end-to-end validation — 20 October 2026
+
+Machine: Shannon MBP 13 - M1 (2020).
+
+Validation recording: 60-second WAV test sample.
+
+Result: COMPLETE.
+
+The following stages completed successfully:
+
+- FFmpeg audio conversion.
+- WhisperX medium-model transcription.
+- Word-level alignment.
+- Independent MPS speaker diarisation using pyannote/speaker-diarization-community-1.
+- Preservation of the original WhisperX JSON.
+- Creation of separate diarized.json.
+- Transcript validation and review.
+- Optional speaker identification and named transcript generation.
+- Archiving of source audio, transcription outputs and audit data.
+
+Independent diarisation completed in 9.1 seconds.
+
+The test detected one speaker. Multi-speaker identification accuracy and bilingual transcription accuracy were not established by this test.
+
+Completed archive:
+~/Desktop/transcript-cleanup/completed/whisperx-validation-20261020
+
+The existing PyAV/FFmpeg duplicate Objective-C class warnings remain observable but did not prevent successful execution. Do not alter the working FFmpeg configuration solely to eliminate these warnings.
+
 
 ## Authentication
 
