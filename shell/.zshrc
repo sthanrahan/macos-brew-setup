@@ -475,3 +475,8 @@ shellsync() {
   echo "[$machine | $(whoami)]"
 }
 
+
+on13() { ssh mbp13 "zsh -lic '$*'" ; }
+on13() { ssh mbp13 "zsh -lic '$*'" ; }
+
+on13() { ssh mbp13 "zsh -lic '$*'" ; }
