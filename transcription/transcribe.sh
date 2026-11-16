@@ -376,6 +376,7 @@ ffmpeg \
   "$OUTPUT" \
   2>&1 | tee "$RUN/audio-conversion.log"
 
+export TX_STARTED_AT="$(date +%Y-%m-%dT%H:%M:%S%z)"
 export TX_RUN="$RUN"
 export TX_INPUT="$INPUT"
 export TX_MODEL="$MODEL"
@@ -392,6 +393,9 @@ python3 - <<'PY_META'
 import json
 import os
 import platform
+import hashlib
+import subprocess
+from datetime import datetime
 from pathlib import Path
 from importlib.metadata import (
     version,
@@ -433,11 +437,27 @@ meta = {
 }
 
 meta.update(
+    schema_version=2,
+    started_at=os.environ.get('TX_STARTED_AT', 'not recorded'),
+    hostname=platform.node(),
+    recording_start='unknown',
+    recording_start_source='not recorded',
+    whisperx_arguments={'device': 'cpu', 'compute_type': 'int8', 'batch_size': 2, 'vad_method': 'silero'},
+    source_audio_sha256=hashlib.sha256(Path(os.environ['TX_INPUT']).read_bytes()).hexdigest(),
     python=platform.python_version(),
     architecture=platform.machine(),
     packages=packages,
 )
 
+try:
+    probe = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format_tags=creation_time',
+                            '-of', 'default=noprint_wrappers=1:nokey=1', os.environ['TX_INPUT']],
+                           capture_output=True, text=True, check=False)
+    candidate = probe.stdout.strip()
+except Exception:
+    candidate = ''
+meta['recording_start_candidates'] = {'container_creation_time': candidate or 'not recorded',
+                                      'filename': 'not recorded'}
 Path(
     os.environ["TX_RUN"],
     "run.json",
@@ -808,6 +828,23 @@ print(
 )
 PY_REVIEW
 
+# Finalise machine-generated provenance without adding user questions.
+export TX_FINAL_RUN="$RUN"
+"$VENV/bin/python3" - <<'PY_FINAL_META'
+import hashlib, json, os
+from datetime import datetime
+from pathlib import Path
+r = Path(os.environ['TX_FINAL_RUN'])
+p = r / 'run.json'
+m = json.loads(p.read_text(encoding='utf-8'))
+m['finished_at'] = datetime.now().astimezone().isoformat(timespec='seconds')
+m['raw_exports_sha256'] = {x.name: hashlib.sha256(x.read_bytes()).hexdigest() for x in sorted((r/'raw').iterdir()) if x.is_file()}
+d = r/'diarization.json'
+if d.exists():
+    m['diarization'] = json.loads(d.read_text(encoding='utf-8'))
+p.write_text(json.dumps(m, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+PY_FINAL_META
+
 mv "$LOG" "$RUN/whisperx.log"
 
 DEST="$ROOT/completed/$BASE"
@@ -854,6 +891,15 @@ if [[ -f "$SPEAKER_HELPER" ]]; then
   else
     print "Speaker identification skipped."
   fi
+fi
+
+# Package generation is automatic and never modifies the raw transcription.
+if [[ -f "$ROOT/build-package.py" ]]; then
+  if ! "$VENV/bin/python3" "$ROOT/build-package.py" "$RUN"; then
+    print -u2 'WARNING: PACKAGE VALIDATION FAILED; source archive remains intact.'
+  fi
+else
+  print -u2 'WARNING: build-package.py not installed; no package created.'
 fi
 
 print ""

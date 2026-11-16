@@ -6,6 +6,9 @@ import json
 import os
 import sys
 import time
+import hashlib
+from datetime import datetime
+from importlib.metadata import version, PackageNotFoundError
 from pathlib import Path
 
 import torch
@@ -59,6 +62,7 @@ def main():
     print(f"Minimum speakers: {args.min_speakers}", flush=True)
     print(f"Maximum speakers: {args.max_speakers}", flush=True)
 
+    started_at = datetime.now().astimezone().isoformat(timespec="seconds")
     started = time.monotonic()
 
     # WhisperX uses FFmpeg directly, avoiding TorchCodec's file decoder.
@@ -134,6 +138,39 @@ def main():
     finally:
         temporary.unlink(missing_ok=True)
 
+    def sha256(path):
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    def package_version(name):
+        try:
+            return version(name)
+        except PackageNotFoundError:
+            return 'not recorded'
+    revision = 'not recorded'
+    try:
+        from huggingface_hub import scan_cache_dir
+        info = scan_cache_dir()
+        for repo in info.repos:
+            if repo.repo_id == 'pyannote/speaker-diarization-community-1':
+                revisions = sorted(repo.revisions, key=lambda r: r.commit_hash)
+                if len(revisions) == 1:
+                    revision = revisions[0].commit_hash
+                elif revisions:
+                    revision = 'multiple cached revisions; not resolved'
+    except Exception:
+        pass
+    sidecar = args.output.parent / 'diarization.json'
+    if sidecar.exists():
+        print('WARNING: diarization.json already exists; not overwritten', flush=True)
+    else:
+        info = {'schema_version': 1, 'model': 'pyannote/speaker-diarization-community-1',
+                'model_revision': revision, 'pyannote_audio_version': package_version('pyannote.audio'),
+                'whisperx_version': package_version('whisperx'), 'device': args.device,
+                'min_speakers': args.min_speakers, 'max_speakers': args.max_speakers,
+                'audio_seconds_loaded': len(waveform) / 16000,
+                'started_at': started_at, 'finished_at': datetime.now().astimezone().isoformat(timespec='seconds'),
+                'input_transcript': args.transcript.name, 'input_sha256': sha256(args.transcript),
+                'output_sha256': sha256(args.output)}
+        sidecar.write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     elapsed = time.monotonic() - started
 
     print(f"Completed in {elapsed:.1f} seconds", flush=True)
