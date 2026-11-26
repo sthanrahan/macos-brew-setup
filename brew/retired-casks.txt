@@ -3,3 +3,4 @@
 nextcloud
 canva
 github-copilot-app
+bluestacks
